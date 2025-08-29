@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Home • Job Portal{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="container hero-content">
+    <h1>Find your <span>next role</span> today.</h1>
+    <p>Browse curated jobs across categories and locations.</p>
+    <a href="{% url 'jobs_list' %}" class="btn">Browse Jobs</a>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Categories</h2>
+  <div class="grid cats">
+    {% for c in categories %}
+    <a class="card cat-card" href="{% url 'jobs_list' %}?category={{ c.slug }}">
+      <h3>{{ c.name }}</h3>
+      <p>{{ c.jobs.count }} openings</p>
+    </a>
+    {% empty %}
+    <p>No categories yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="section">
+  <h2>Latest Jobs</h2>
+  <div class="grid jobs">
+    {% for job in latest_jobs %}
+    <article class="card job-card" data-job-id="{{ job.id }}">
+      <div class="job-head">
+        <a href="{% url 'job_detail' job.id %}"><h3>{{ job.title }}</h3></a>
+        <button class="save-btn" data-id="{{ job.id }}">Save</button>
+      </div>
+      <p class="muted">{{ job.company }} • {{ job.location }}</p>
+      <p class="desc">{{ job.description|truncatechars:160 }}</p>
+      <a class="btn-link" href="{% url 'job_detail' job.id %}">View details →</a>
+    </article>
+    {% empty %}
+    <p>No jobs yet.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

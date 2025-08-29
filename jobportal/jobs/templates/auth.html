@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Login / Register • Job Portal{% endblock %}
+{% block content %}
+<section class="auth-section">
+  <div class="auth-container">
+    <div class="auth-card">
+
+      <div class="tabs">
+        <button class="tab-btn active" data-target="#login">Login</button>
+        <button class="tab-btn" data-target="#register">Register</button>
+      </div>
+
+      <div id="login" class="tab-panel active">
+        <form method="post" id="loginForm" class="form">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="login">
+          {{ login_form.non_field_errors }}
+          <label>Username {{ login_form.username }}</label>
+          <label>Password {{ login_form.password }}</label>
+          <button class="btn full-btn" type="submit">Login</button>
+        </form>
+      </div>
+
+      <div id="register" class="tab-panel">
+        <form method="post" id="registerForm" class="form">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="register">
+          {{ register_form.non_field_errors }}
+          <div class="grid form-grid">
+            <label>Username {{ register_form.username }}</label>
+            <label>Email {{ register_form.email }}</label>
+            <label>Password {{ register_form.password1 }}</label>
+            <label>Confirm {{ register_form.password2 }}</label>
+          </div>
+          <button class="btn full-btn" type="submit">Create Account</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Tab toggle
+  const tabBtns = document.querySelectorAll(".tab-btn");
+  const panels = document.querySelectorAll(".tab-panel");
+  tabBtns.forEach(btn => btn.addEventListener("click", () => {
+    tabBtns.forEach(b => b.classList.remove("active"));
+    panels.forEach(p => p.classList.remove("active"));
+    btn.classList.add("active");
+    document.querySelector(btn.dataset.target).classList.add("active");
+  }));
+
+  // Basic client-side checks
+  document.getElementById("registerForm")?.addEventListener("submit", function(e){
+    const name = this.querySelector('input[name="username"]');
+    const email = this.querySelector('input[name="email"]');
+    if(!name.value.trim()) { e.preventDefault(); alert("Username is required"); }
+    if(!email.value.trim() || !/^\S+@\S+\.\S+$/.test(email.value)){ e.preventDefault(); alert("Valid email required"); }
+  });
+</script>
+{% endblock %}

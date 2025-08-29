@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Jobs • Job Portal{% endblock %}
+{% block content %}
+<section class="section">
+  <h2>Job Listings</h2>
+
+  <form class="filters" method="get">
+    <label>Category
+      <select name="category">
+        <option value="">All</option>
+        {% for c in categories %}
+        <option value="{{ c.slug }}" {% if current_category == c.slug %}selected{% endif %}>{{ c.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Location
+      <input type="text" name="location" placeholder="e.g. Remote" value="{{ current_location }}">
+    </label>
+    <button class="btn" type="submit">Filter</button>
+  </form>
+
+  <div class="grid jobs">
+    {% for job in jobs %}
+    <article class="card job-card" data-job-id="{{ job.id }}">
+      <div class="job-head">
+        <a href="{% url 'job_detail' job.id %}"><h3>{{ job.title }}</h3></a>
+        <button class="save-btn" data-id="{{ job.id }}">Save</button>
+      </div>
+      <p class="muted">{{ job.company }} • {{ job.location }}</p>
+      <p class="desc">{{ job.description|truncatechars:180 }}</p>
+      <a class="btn-link" href="{% url 'job_detail' job.id %}">View details →</a>
+    </article>
+    {% empty %}
+    <p>No jobs found.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

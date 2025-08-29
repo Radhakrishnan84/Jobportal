@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}{{ job.title }} • Job Portal{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="card">
+    <div class="job-detail-head">
+      <div>
+        <h2>{{ job.title }}</h2>
+        <p class="muted">{{ job.company }} • {{ job.location }}</p>
+      </div>
+      <button class="save-btn {% if saved %}is-saved{% endif %}" data-id="{{ job.id }}">
+        {% if saved %}Saved{% else %}Save Job{% endif %}
+      </button>
+    </div>
+    <div class="job-description">
+      {{ job.description|linebreaks }}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="card">
+    <h3>Apply for this job</h3>
+    {% if user.is_authenticated %}
+      <form method="post" enctype="multipart/form-data" class="form">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="grid form-grid">
+          <label>Name {{ form.name }}</label>
+          <label>Email {{ form.email }}</label>
+          <label>Resume {{ form.resume }}</label>
+        </div>
+        <small class="muted">Allowed: .pdf, .doc, .docx | Max 2MB</small>
+        <button class="btn" type="submit">Submit Application</button>
+      </form>
+    {% else %}
+      <p class="muted">Please <a class="btn-link" href="{% url 'login_register' %}?next={% url 'job_detail' job.id %}">login</a> to apply.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
