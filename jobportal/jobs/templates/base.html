@@ -3,14 +3,14 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>{% block title %}Job Portal{% endblock %}</title>
+  <title>{% block title %}Vetri Job Portal{% endblock %}</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
   <nav class="navbar">
     <div class="container nav-inner">
-      <a href="{% url 'home' %}" class="brand">Job<span>Portal</span></a>
+      <a href="{% url 'home' %}" class="brand">Vetri Job<span>Portal</span></a>
       <ul class="nav-links">
         <li><a href="{% url 'jobs_list' %}">Jobs</a></li>
         {% if user.is_authenticated %}
